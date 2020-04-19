@@ -1,4 +1,3 @@
-# Whenever a push is made to the master branch then run the job
 on:
   push:
     branches: [ master ]
