@@ -47,11 +47,11 @@ func _process(delta: float) -> void:
 	canvas.offset.x = lerp(canvas.offset.x - look.x, 0, 20 * delta)
 	canvas.offset.y = lerp(canvas.offset.y, max(0, camera.rotation_degrees.x), 20 * delta)
 
-	if move != Vector2.ZERO:
-		sway_degree += 6 * delta
-		canvas.offset += Vector2(sin(sway_degree) * 10, 2 + (cos(sway_degree * 2) * 2))
-
 	if is_on_floor():
+		if move != Vector2.ZERO:
+			sway_degree += 6 * delta
+			canvas.offset += Vector2(sin(sway_degree) * 10, 2 + (cos(sway_degree * 2) * 2))
+
 		if Input.is_action_just_pressed("attack"):
 			anim_player.play("swing")
 			if anim_player.current_animation_position / anim_player.current_animation_length >= 0.5:
