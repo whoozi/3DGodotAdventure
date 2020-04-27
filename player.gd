@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 	var look := mouse_delta * MOUSE_SENSITIVITY
 	look += Vector2(
 		(Input.get_action_strength("look_right") - Input.get_action_strength("look_left")),
-			Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
+		Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
 	) * JOY_SENSITIVITY
 	mouse_delta = Vector2.ZERO
 
@@ -49,10 +49,10 @@ func _process(delta: float) -> void:
 			canvas.offset += Vector2(sin(sway_degree) * 10, 2 + (cos(sway_degree * 2) * 2))
 
 		if Input.is_action_just_pressed("attack"):
-			anim_player.play("swing")
-			if anim_player.current_animation_position / anim_player.current_animation_length >= 0.5:
+			anim_player.play("swing_left")
+			if anim_player.current_animation_position > anim_player.current_animation_length / 2:
 				anim_player.clear_queue()
-				anim_player.queue("swing")
+				anim_player.queue("swing_left")
 
 	if anim_player.current_animation == "":
 		anim_player.play("idle")
@@ -62,16 +62,16 @@ func _process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and is_mouse_captured:
-			mouse_delta = event.relative
+		mouse_delta = event.relative
 
 	if event is InputEventKey and event.is_pressed():
-			match event.scancode:
-				KEY_ESCAPE:
-					is_mouse_captured = ! is_mouse_captured
-					Input.set_mouse_mode(
-						Input.MOUSE_MODE_CAPTURED if is_mouse_captured else Input.MOUSE_MODE_VISIBLE
-					)
-				KEY_F11:
-					OS.window_fullscreen = ! OS.window_fullscreen
-				KEY_F9:
-					get_tree().reload_current_scene()
+		match event.scancode:
+			KEY_ESCAPE:
+				is_mouse_captured = ! is_mouse_captured
+				Input.set_mouse_mode(
+					Input.MOUSE_MODE_CAPTURED if is_mouse_captured else Input.MOUSE_MODE_VISIBLE
+				)
+			KEY_F11:
+				OS.window_fullscreen = ! OS.window_fullscreen
+			KEY_F9:
+				get_tree().reload_current_scene()
