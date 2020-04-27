@@ -20,17 +20,13 @@ func _process(delta: float) -> void:
 	var move := Vector2(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 		Input.get_action_strength("move_backward") - Input.get_action_strength("move_forward")
-	)
-	move = move.clamped(1)
+	).clamped(1)
 
 	var look := mouse_delta * MOUSE_SENSITIVITY
-	look += (
-		Vector2(
-			Input.get_action_strength("look_right") - Input.get_action_strength("look_left"),
+	look += Vector2(
+		(Input.get_action_strength("look_right") - Input.get_action_strength("look_left")),
 			Input.get_action_strength("look_down") - Input.get_action_strength("look_up")
-		)
-		* JOY_SENSITIVITY
-	)
+	) * JOY_SENSITIVITY
 	mouse_delta = Vector2.ZERO
 
 	# Rotate player/camera
@@ -49,7 +45,7 @@ func _process(delta: float) -> void:
 
 	if is_on_floor():
 		if move != Vector2.ZERO:
-			sway_degree += 6 * delta
+			sway_degree += (6 * move.length()) * delta
 			canvas.offset += Vector2(sin(sway_degree) * 10, 2 + (cos(sway_degree * 2) * 2))
 
 		if Input.is_action_just_pressed("attack"):
@@ -65,12 +61,10 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion:
-		if is_mouse_captured:
+	if event is InputEventMouseMotion and is_mouse_captured:
 			mouse_delta = event.relative
 
-	if event is InputEventKey:
-		if event.pressed:
+	if event is InputEventKey and event.is_pressed():
 			match event.scancode:
 				KEY_ESCAPE:
 					is_mouse_captured = ! is_mouse_captured
