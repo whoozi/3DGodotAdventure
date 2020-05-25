@@ -8,7 +8,7 @@ public class Mob : KinematicBody
 
 	protected Vector3 velocity;
 
-	public override void _PhysicsProcess(float delta)
+	public override void _Process(float delta)
 	{
 		velocity.y += Gravity * delta;
 		MoveAndSlide(velocity, Vector3.Up, true);

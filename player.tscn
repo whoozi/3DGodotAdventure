@@ -5,8 +5,8 @@
 [ext_resource path="res://Player.cs" type="Script" id=3]
 
 [sub_resource type="CylinderShape" id=1]
-radius = 0.5
-height = 1.0
+radius = 0.3
+height = 0.6
 
 [sub_resource type="Animation" id=2]
 tracks/0/type = "value"
@@ -115,7 +115,7 @@ tracks/3/keys = {
 script = ExtResource( 3 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
 shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -124,9 +124,10 @@ anims/idle = SubResource( 2 )
 anims/swing_left = SubResource( 3 )
 
 [node name="WorldCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599966, 0 )
 cull_mask = 1048573
 current = true
+far = 10.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

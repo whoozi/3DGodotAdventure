@@ -1,3 +1,5 @@
 .import/
 .build/
 .mono/
+
+**/*.blend1
