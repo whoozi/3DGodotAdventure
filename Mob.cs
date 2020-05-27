@@ -6,14 +6,14 @@ public class Mob : KinematicBody
 
 	[Export] protected float speed = 3f;
 
-	protected Vector3 velocity;
+	protected Vector3 velocity, movement;
 
 	public override void _Process(float delta)
 	{
 		velocity.y += Gravity * delta;
-		MoveAndSlide(velocity, Vector3.Up, true);
+		movement = MoveAndSlide(velocity, Vector3.Up, true);
 
 		if (IsOnFloor())
-			velocity.y = 0f;
+			velocity.y = Gravity;
 	}
 }

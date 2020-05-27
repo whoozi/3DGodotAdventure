@@ -5,7 +5,8 @@
 [ext_resource path="res://Player.cs" type="Script" id=3]
 
 [sub_resource type="CylinderShape" id=1]
-radius = 0.3
+margin = 0.05
+radius = 0.1
 height = 0.6
 
 [sub_resource type="Animation" id=2]
@@ -123,12 +124,6 @@ autoplay = "idle"
 anims/idle = SubResource( 2 )
 anims/swing_left = SubResource( 3 )
 
-[node name="WorldCamera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599966, 0 )
-cull_mask = 1048573
-current = true
-far = 10.0
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
@@ -148,3 +143,9 @@ texture = ExtResource( 2 )
 vframes = 3
 hframes = 3
 frame = 5
+
+[node name="WorldCamera" type="Camera" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599966, 0 )
+cull_mask = 1048573
+current = true
+far = 10.0

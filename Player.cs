@@ -1,4 +1,5 @@
 using Godot;
+using static Godot.GD;
 
 public class Player : Mob
 {
@@ -27,6 +28,8 @@ public class Player : Mob
 
 	public override void _Process(float delta)
 	{
+		base._Process(delta);
+
 		Vector2 move = new Vector2(
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
 			Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
@@ -58,7 +61,7 @@ public class Player : Mob
 			if (move != Vector2.Zero)
 			{
 				swayDegrees += 6f * move.Length() * delta;
-				canvas.Offset += new Vector2(Mathf.Sin(swayDegrees) * 10f, 2f + (Mathf.Cos(swayDegrees * 2f) * 2f));
+				canvas.Offset += new Vector2(Mathf.Sin(swayDegrees) * 10f, 2f + (Mathf.Cos(swayDegrees * 2f) * 2f)) * delta * 100f;
 			}
 
 			if (Input.IsActionJustPressed("attack"))
@@ -75,8 +78,6 @@ public class Player : Mob
 
 		if (animation.CurrentAnimation.Empty())
 			animation.Play("idle");
-
-		base._Process(delta);
 	}
 
 	public override void _UnhandledInput(InputEvent @event)

@@ -2,4 +2,5 @@
 .build/
 .mono/
 
+**/*.old
 **/*.blend1
