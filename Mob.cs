@@ -1,4 +1,5 @@
 using Godot;
+using static Godot.GD;
 
 public class Mob : KinematicBody
 {
@@ -6,14 +7,18 @@ public class Mob : KinematicBody
 
 	[Export] protected float speed = 3f;
 
-	protected Vector3 velocity, movement;
+	protected Vector3 velocity;
 
-	public override void _Process(float delta)
+	public override void _PhysicsProcess(float delta)
 	{
 		velocity.y += Gravity * delta;
-		movement = MoveAndSlide(velocity, Vector3.Up, true);
 
 		if (IsOnFloor())
 			velocity.y = Gravity;
+	}
+
+	protected virtual Vector3 PerformMovement(Vector3 movement)
+	{
+		return MoveAndSlide(movement, Vector3.Up, true);
 	}
 }

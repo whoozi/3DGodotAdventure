@@ -15,7 +15,7 @@ material = SubResource( 1 )
 size = Vector2( 5, 5 )
 
 [sub_resource type="CylinderShape" id=3]
-radius = 0.3
+radius = 0.2
 height = 3.0
 
 [node name="Tree" type="StaticBody"]

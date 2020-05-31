@@ -4,10 +4,14 @@ using static Godot.GD;
 public class Player : Mob
 {
 	const float MouseSensitivity = 1f;
-	const float JoySensitivity = 1.5f;
+	const float JoySensitivity = 2f;
 
-	Vector2 mouseDelta;
-	float swayDegrees;
+	Vector2 mouseDelta, lookInput, moveInput;
+	float canvasWalkDegrees;
+	Vector3 lastOrigin, currentOrigin;
+	bool isOriginDirty;
+	Transform initialCamera;
+
 	AnimationPlayer animation;
 	Camera camera;
 	CanvasLayer canvas;
@@ -17,58 +21,84 @@ public class Player : Mob
 		return Input.GetMouseMode() == Input.MouseMode.Captured;
 	}
 
+	// Used by the camera to reduce stutter caused by fixed physics update loop
+	private void RefreshOrigin()
+	{
+		isOriginDirty = false;
+
+		lastOrigin = currentOrigin;
+		currentOrigin = Transform.origin;
+	}
+
 	public override void _Ready()
 	{
 		animation = GetNode<AnimationPlayer>("AnimationPlayer");
 		camera = GetNode<Camera>("WorldCamera");
 		canvas = GetNode<CanvasLayer>("CanvasLayer");
 
+		initialCamera = camera.Transform;
+		camera.SetAsToplevel(true);
+
 		Input.SetMouseMode(Input.MouseMode.Captured);
 	}
 
-	public override void _Process(float delta)
+	public override void _PhysicsProcess(float delta)
 	{
-		base._Process(delta);
+		base._PhysicsProcess(delta);
 
-		Vector2 move = new Vector2(
+		moveInput = new Vector2(
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
 			Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
 		).Clamped(1f);
 
-		Vector2 look = mouseDelta * (GetViewport().Size * 0.0001f) * MouseSensitivity;
-		look.y *= GetViewport().Size.x / GetViewport().Size.y;
-		look += new Vector2(
-			Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left"),
-			Input.GetActionStrength("look_down") - Input.GetActionStrength("look_up")
-		) * JoySensitivity;
+		velocity = PerformMovement(new Vector3(moveInput.x, 0, moveInput.y).Rotated(Vector3.Up, camera.Rotation.y) * speed + (velocity.y * Vector3.Up));
+
+		if (isOriginDirty)
+			RefreshOrigin();
+
+		isOriginDirty = true;
+	}
+
+	public override void _Process(float delta)
+	{
+		if (isOriginDirty)
+			RefreshOrigin();
+
+		lookInput = mouseDelta * MouseSensitivity * (GetViewport().Size * 0.0001f);
+		lookInput.y *= GetViewport().Size.x / GetViewport().Size.y;
 		mouseDelta = Vector2.Zero;
 
-		// Rotate player/camera
-		RotationDegrees -= new Vector3(0, look.x, 0);
-		camera.RotationDegrees = camera.RotationDegrees.X(Mathf.Clamp(camera.RotationDegrees.x - look.y, -75, 75));
+		lookInput += new Vector2(
+			Input.GetActionStrength("look_right") - Input.GetActionStrength("look_left"),
+			Input.GetActionStrength("look_down") - Input.GetActionStrength("look_up")
+		) * JoySensitivity * delta * 100f;
 
-		// Perform movement
-		velocity = new Vector3(move.x, 0, move.y).Rotated(Vector3.Up, Rotation.y) * speed + (velocity.y * Vector3.Up);
+		// Rotate player and camera
+		Rotate(Vector3.Up, Mathf.Deg2Rad(-lookInput.x));
+		camera.Rotation = new Vector3(Mathf.Clamp(camera.Rotation.x - Mathf.Deg2Rad(lookInput.y), -75, 75), Rotation.y, 0f);
+		// Position camera; apply physics interpolation fraction to reduce stutter caused by fixed physics loop
+		camera.Translation = lastOrigin + ((currentOrigin - lastOrigin) * Engine.GetPhysicsInterpolationFraction()) + initialCamera.origin;
 
-		// Animate canvas
+		// Lerp canvas back to center
 		canvas.Offset = new Vector2(
-			Mathf.Lerp(canvas.Offset.x - look.x, 0, 20f * delta),
+			Mathf.Lerp(canvas.Offset.x - lookInput.x, 0, 20f * delta),
 			Mathf.Lerp(canvas.Offset.y, Mathf.Max(0, camera.RotationDegrees.x), 20f * delta)
 		);
 
 		if (IsOnFloor())
 		{
-			if (move != Vector2.Zero)
+			// Do canvas "walking" animation
+			if (!moveInput.IsEqualApprox(Vector2.Zero))
 			{
-				swayDegrees += 6f * move.Length() * delta;
-				canvas.Offset += new Vector2(Mathf.Sin(swayDegrees) * 10f, 2f + (Mathf.Cos(swayDegrees * 2f) * 2f)) * delta * 100f;
+				canvasWalkDegrees += 6f * (velocity.Length() / speed) * delta;
+				canvas.Offset += new Vector2(Mathf.Sin(canvasWalkDegrees) * 10f, 2f + (Mathf.Cos(canvasWalkDegrees * 2f) * 2f)) * delta * 100f;
 			}
 
 			if (Input.IsActionJustPressed("attack"))
 			{
 				animation.Play("swing_left");
 
-				if (animation.CurrentAnimationPosition / animation.CurrentAnimationLength >= 0.5f)
+				if (animation.CurrentAnimationPosition / animation.CurrentAnimationLength > 0.5f)
 				{
 					animation.ClearQueue();
 					animation.Queue("swing_left");
@@ -99,17 +129,5 @@ public class Player : Mob
 					GetTree().ReloadCurrentScene();
 					break;
 			}
-	}
-}
-
-namespace Godot
-{
-	public static class Vector3Ext
-	{
-		/// <summary>Returns Vector3 with modified x.</summary>
-		public static Vector3 X(this Vector3 vec3, float x)
-		{
-			return new Vector3(x, vec3.y, vec3.z);
-		}
 	}
 }
