@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/axe_swing.png-0eaaa0cb180a86cfce1d3143da594ca4.stex"
+path="res://.import/axe_idle.png-41f1c1945a01a11d0b4ae1dd72e276a3.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://axe_swing.png"
-dest_files=[ "res://.import/axe_swing.png-0eaaa0cb180a86cfce1d3143da594ca4.stex" ]
+source_file="res://assets/weapons/axe_idle.png"
+dest_files=[ "res://.import/axe_idle.png-41f1c1945a01a11d0b4ae1dd72e276a3.stex" ]
 
 [params]
 

@@ -1,5 +1,4 @@
 using Godot;
-using static Godot.GD;
 
 public class Player : Mob
 {
@@ -16,10 +15,7 @@ public class Player : Mob
 	Camera camera;
 	CanvasLayer canvas;
 
-	private bool IsMouseCaptured()
-	{
-		return Input.GetMouseMode() == Input.MouseMode.Captured;
-	}
+	private bool IsMouseCaptured() => Input.GetMouseMode() == Input.MouseMode.Captured;
 
 	// Used by the camera to reduce stutter caused by fixed physics update loop
 	private void RefreshOrigin()

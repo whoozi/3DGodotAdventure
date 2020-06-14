@@ -1,5 +1,4 @@
 using Godot;
-using static Godot.GD;
 
 public class Mob : KinematicBody
 {
