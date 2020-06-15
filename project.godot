@@ -19,6 +19,10 @@ config/name="Adventure"
 run/main_scene="res://src/World.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+WeaponTable="*res://src/weapons/WeaponTable.cs"
+
 [display]
 
 window/size/height=576

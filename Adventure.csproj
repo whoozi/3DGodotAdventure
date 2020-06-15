@@ -60,6 +60,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\mobs\Mob.cs" />
     <Compile Include="src\mobs\player\Player.cs" />
+    <Compile Include="src\weapons\Weapon.cs" />
+    <Compile Include="src\weapons\WeaponTable.cs" />
     <Compile Include="src\World.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

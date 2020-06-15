@@ -11,9 +11,9 @@ public class Player : Mob
 	bool isOriginDirty;
 	Transform initialCamera;
 
-	AnimationPlayer animation;
 	Camera camera;
 	CanvasLayer canvas;
+	Weapon weapon;
 
 	private bool IsMouseCaptured() => Input.GetMouseMode() == Input.MouseMode.Captured;
 
@@ -28,9 +28,10 @@ public class Player : Mob
 
 	public override void _Ready()
 	{
-		animation = GetNode<AnimationPlayer>("AnimationPlayer");
 		camera = GetNode<Camera>("WorldCamera");
 		canvas = GetNode<CanvasLayer>("CanvasLayer");
+		// weapon = (Weapon)WeaponTable.sword.Instance();
+		// canvas.GetNode("Control").AddChild(weapon);
 
 		initialCamera = camera.Transform;
 		camera.SetAsToplevel(true);
@@ -76,10 +77,12 @@ public class Player : Mob
 		camera.Translation = lastOrigin + ((currentOrigin - lastOrigin) * Engine.GetPhysicsInterpolationFraction()) + initialCamera.origin;
 
 		// Lerp canvas back to center
-		canvas.Offset = new Vector2(
-			Mathf.Lerp(canvas.Offset.x - lookInput.x, 0, 20f * delta),
-			Mathf.Lerp(canvas.Offset.y, Mathf.Max(0, camera.RotationDegrees.x), 20f * delta)
-		);
+		if (weapon != null)
+			canvas.Offset = new Vector2(
+				Mathf.Lerp(canvas.Offset.x - lookInput.x, 0, 20f * delta),
+				Mathf.Lerp(canvas.Offset.y, Mathf.Max(0, camera.RotationDegrees.x), 20f * delta)
+			);
+		else canvas.Offset = new Vector2(0f, 576f);
 
 		if (IsOnFloor())
 		{
@@ -90,20 +93,9 @@ public class Player : Mob
 				canvas.Offset += new Vector2(Mathf.Sin(canvasWalkDegrees) * 10f, 2f + (Mathf.Cos(canvasWalkDegrees * 2f) * 2f)) * delta * 100f;
 			}
 
-			if (Input.IsActionJustPressed("attack"))
-			{
-				animation.Play("swing_left");
-
-				if (animation.CurrentAnimationPosition / animation.CurrentAnimationLength > 0.5f)
-				{
-					animation.ClearQueue();
-					animation.Queue("swing_left");
-				}
-			}
+			if (weapon != null & Input.IsActionJustPressed("attack"))
+				weapon.Use();
 		}
-
-		if (animation.CurrentAnimation.Empty())
-			animation.Play("idle");
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -123,6 +115,18 @@ public class Player : Mob
 					break;
 				case KeyList.F9:
 					GetTree().ReloadCurrentScene();
+					break;
+				case KeyList.Key1:
+					if (weapon != null) weapon.QueueFree();
+					weapon = (Weapon)WeaponTable.sword.Instance();
+					canvas.GetNode("Control").AddChild(weapon);
+					canvas.Offset = new Vector2(0f, 576f);
+					break;
+				case KeyList.Key2:
+					if (weapon != null) weapon.QueueFree();
+					weapon = (Weapon)WeaponTable.axe.Instance();
+					canvas.GetNode("Control").AddChild(weapon);
+					canvas.Offset = new Vector2(0f, 576f);
 					break;
 			}
 	}

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/axe_idle.png-41f1c1945a01a11d0b4ae1dd72e276a3.stex"
+path="res://.import/sword_swing_left.png-7f2c91afce6158f0a2e10f812ba715d0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/weapons/axe_idle.png"
-dest_files=[ "res://.import/axe_idle.png-41f1c1945a01a11d0b4ae1dd72e276a3.stex" ]
+source_file="res://assets/weapons/sword/sword_swing_left.png"
+dest_files=[ "res://.import/sword_swing_left.png-7f2c91afce6158f0a2e10f812ba715d0.stex" ]
 
 [params]
 
