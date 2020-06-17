@@ -6,8 +6,13 @@ public class World : Spatial
 	public override void _Ready()
 	{
 		Randomize();
-
 		Node environment = GetNode("Environment");
+
+		PopulateTrees(environment);
+	}
+
+	void PopulateTrees(Node parent)
+	{
 		PackedScene scene = ResourceLoader.Load<PackedScene>("res://src/env/Tree.tscn");
 
 		SpatialMaterial[] materials = new SpatialMaterial[4] {
@@ -27,7 +32,7 @@ public class World : Spatial
 			MeshInstance mesh = tree.GetNode<MeshInstance>("MeshInstance");
 			mesh.MaterialOverride = materials[Randi() % 4];
 
-			AddChildBelowNode(environment, tree);
+			AddChildBelowNode(parent, tree);
 		}
 	}
 }
