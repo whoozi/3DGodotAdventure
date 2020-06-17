@@ -35,3 +35,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599966, 0 )
 cull_mask = 1048573
 current = true
 far = 10.0
+
+[node name="RayCast" type="RayCast" parent="WorldCamera"]
+cast_to = Vector3( 0, 0, -1 )
