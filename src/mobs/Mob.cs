@@ -1,12 +1,17 @@
 using Godot;
 
-public class Mob : KinematicBody
+public class Mob : KinematicBody, IDamageable
 {
 	const float Gravity = -9.8f;
 
 	[Export] protected float speed = 3f;
 
 	protected Vector3 velocity;
+
+	public virtual void AttemptDamage()
+	{
+		throw new System.NotImplementedException();
+	}
 
 	public override void _PhysicsProcess(float delta)
 	{

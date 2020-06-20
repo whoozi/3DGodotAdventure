@@ -4,6 +4,7 @@ using static Godot.GD;
 public class Weapon : Sprite
 {
 	AnimationPlayer anim;
+	RayCast ray;
 
 	public override void _Ready()
 	{
@@ -30,11 +31,18 @@ public class Weapon : Sprite
 
 		queueUse = false;
 		anim.Play("swing_left");
+		this.ray = ray;
+	}
 
-		ray.CastTo = Vector3.Forward * 2f;
+	protected virtual void Anim_Hit()
+	{
+		if (ray == null)
+			return;
+
+		ray.CastTo = Vector3.Forward;
 		ray.ForceRaycastUpdate();
 
-		if (ray.IsColliding())
-			Print((ray.GetCollider() as Node).Name, ray.GetCollisionPoint());
+		if (ray.IsColliding() && ray.GetCollider() is IDamageable)
+			(ray.GetCollider() as IDamageable).AttemptDamage();
 	}
 }
