@@ -32,7 +32,6 @@ __meta__ = {
 
 [node name="WorldCamera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.599966, 0 )
-cull_mask = 1048573
 current = true
 far = 10.0
 

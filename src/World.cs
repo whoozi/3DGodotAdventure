@@ -3,12 +3,15 @@ using static Godot.GD;
 
 public class World : Spatial
 {
+	public static Player player;
+
 	public override void _Ready()
 	{
 		Randomize();
 		Node environment = GetNode("Environment");
 
 		PopulateTrees(environment);
+		PopulateMobs();
 	}
 
 	void PopulateTrees(Node parent)
@@ -29,7 +32,6 @@ public class World : Spatial
 		for (int i = 0; i < 2500; i++)
 		{
 			StaticBody tree = (StaticBody)scene.Instance();
-
 			tree.Translation = new Vector3((float)RandRange(-50f, 50f), 0f, (float)RandRange(-50f, 50f));
 
 			bool tiny = Randf() <= 0.015f;
@@ -40,6 +42,20 @@ public class World : Spatial
 			mesh.MaterialOverride = trees[Randi() % 4 + (dead ? 4 : 0)];
 
 			AddChildBelowNode(parent, tree);
+		}
+	}
+
+	void PopulateMobs()
+	{
+		PackedScene scene = ResourceLoader.Load<PackedScene>("res://src/mobs/Mob.tscn");
+
+		for (int i = 0; i < 70; i++)
+		{
+			Mob mob = (Mob)scene.Instance();
+			mob.Translation = new Vector3((float)RandRange(-50f, 50f), 0f, (float)RandRange(-50f, 50f));
+			mob.RotationDegrees = Vector3.Up * (Randi() % 360);
+
+			AddChild(mob);
 		}
 	}
 }

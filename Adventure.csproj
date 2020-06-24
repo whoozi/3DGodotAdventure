@@ -62,6 +62,7 @@
     <Compile Include="src\IDamageable.cs" />
     <Compile Include="src\mobs\Mob.cs" />
     <Compile Include="src\mobs\player\Player.cs" />
+    <Compile Include="src\mobs\RotateableSprite.cs" />
     <Compile Include="src\weapons\Weapon.cs" />
     <Compile Include="src\weapons\WeaponTable.cs" />
     <Compile Include="src\World.cs" />

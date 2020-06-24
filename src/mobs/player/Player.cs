@@ -62,6 +62,8 @@ public class Player : Mob
 
 	public override void _Ready()
 	{
+		World.player = this;
+
 		camera = GetNode<Camera>("WorldCamera");
 		canvas = GetNode<CanvasLayer>("CanvasLayer");
 		ray = camera.GetNode<RayCast>("RayCast");
@@ -74,14 +76,18 @@ public class Player : Mob
 
 	public override void _PhysicsProcess(float delta)
 	{
-		base._PhysicsProcess(delta);
-
 		moveInput = new Vector2(
 			Input.GetActionStrength("move_right") - Input.GetActionStrength("move_left"),
 			Input.GetActionStrength("move_backward") - Input.GetActionStrength("move_forward")
 		).Clamped(1f);
 
-		velocity = PerformMovement(new Vector3(moveInput.x, 0, moveInput.y).Rotated(Vector3.Up, camera.Rotation.y) * speed + (velocity.y * Vector3.Up));
+		velocity.y += Gravity * delta;
+
+		if (IsOnFloor())
+			velocity.y = Gravity;
+
+		velocity = PerformMovement(
+			new Vector3(moveInput.x, 0, moveInput.y).Rotated(Vector3.Up, camera.Rotation.y) * speed + (velocity.y * Vector3.Up));
 
 		if (isOriginDirty)
 			RefreshOrigin();
