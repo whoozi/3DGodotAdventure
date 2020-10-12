@@ -1,17 +1,15 @@
 using Godot;
 
-public class RotateableSprite : MeshInstance
+public class ViewAngleSprite : Sprite3D
 {
 	[Export]
 	Texture front, frontLeft, frontRight, back, backLeft, backRight, left, right;
 
 	Spatial parent;
-	SpatialMaterial material;
 
 	public override void _Ready()
 	{
 		parent = GetParentSpatial();
-		material = (SpatialMaterial)GetSurfaceMaterial(0);
 	}
 
 	public override void _PhysicsProcess(float delta)
@@ -24,20 +22,20 @@ public class RotateableSprite : MeshInstance
 		float signed = angle * sign; // (signedAngle + 180) % 360
 
 		if (signed >= -22.5f && signed <= 22.5f)
-			material.AlbedoTexture = front;
+			Texture = front;
 		else if (signed < -22.5f && signed > -67.5f)
-			material.AlbedoTexture = frontLeft;
+			Texture = frontLeft;
 		else if (signed > 22.5f && signed < 67.5f)
-			material.AlbedoTexture = frontRight;
+			Texture = frontRight;
 		else if (signed <= -67.5f && signed >= -112.5f)
-			material.AlbedoTexture = left;
+			Texture = left;
 		else if (signed >= 67.5f && signed <= 112.5f)
-			material.AlbedoTexture = right;
+			Texture = right;
 		else if (signed < -112.5f && signed > -157.5f)
-			material.AlbedoTexture = backLeft;
+			Texture = backLeft;
 		else if (signed > 112.5f && signed < 157.5f)
-			material.AlbedoTexture = backRight;
+			Texture = backRight;
 		else if (signed >= 157.5f || signed <= -157.5f)
-			material.AlbedoTexture = back;
+			Texture = back;
 	}
 }

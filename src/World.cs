@@ -18,15 +18,9 @@ public class World : Spatial
 	{
 		PackedScene scene = ResourceLoader.Load<PackedScene>("res://src/env/Tree.tscn");
 
-		SpatialMaterial[] trees = new SpatialMaterial[8] {
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_0.tres"),
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_1.tres"),
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_2.tres"),
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_3.tres"),
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_dead_0.tres"),
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_dead_1.tres"),
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_dead_2.tres"),
-			ResourceLoader.Load<SpatialMaterial>("res://assets/env/tree_dead_3.tres")
+		Texture[] trees = new Texture[2] {
+			ResourceLoader.Load<Texture>("res://assets/env/tree.png"),
+			ResourceLoader.Load<Texture>("res://assets/env/tree_dead.png")
 		};
 
 		for (int i = 0; i < 2500; i++)
@@ -37,9 +31,10 @@ public class World : Spatial
 			bool tiny = Randf() <= 0.015f;
 			tree.Scale = Vector3.One * (float)RandRange(1f, 1.5f) * (tiny ? 0.5f : 1f);
 
-			MeshInstance mesh = tree.GetNode<MeshInstance>("MeshInstance");
+			Sprite3D sprite = tree.GetNode<Sprite3D>("Sprite3D");
 			bool dead = Randf() <= 0.15f;
-			mesh.MaterialOverride = trees[Randi() % 4 + (dead ? 4 : 0)];
+			sprite.Texture = trees[dead ? 1 : 0];
+			sprite.Frame = Mathf.Abs((int)Randi() % 4);
 
 			AddChildBelowNode(parent, tree);
 		}

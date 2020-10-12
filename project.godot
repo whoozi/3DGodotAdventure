@@ -17,7 +17,7 @@ _global_script_class_icons={
 
 config/name="Adventure"
 run/main_scene="res://src/World.tscn"
-config/icon="res://icon.png"
+config/icon="res://assets/icon.png"
 
 [autoload]
 
@@ -102,4 +102,4 @@ common/physics_jitter_fix=0.0
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
-environment/default_environment="res://default_env.tres"
+environment/default_environment="res://assets/default_env.tres"

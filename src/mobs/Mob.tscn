@@ -1,90 +1,85 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://src/mobs/Mob.cs" type="Script" id=1]
 [ext_resource path="res://assets/mobs/knight_front.png" type="Texture" id=2]
-[ext_resource path="res://assets/mobs/knight_back.png" type="Texture" id=3]
-[ext_resource path="res://assets/mobs/knight_left.png" type="Texture" id=4]
-[ext_resource path="res://assets/mobs/knight_right.png" type="Texture" id=5]
-[ext_resource path="res://src/mobs/RotateableSprite.cs" type="Script" id=6]
+[ext_resource path="res://src/mobs/ViewAngleSprite.cs" type="Script" id=3]
+[ext_resource path="res://assets/mobs/knight_right.png" type="Texture" id=4]
+[ext_resource path="res://assets/mobs/knight_back.png" type="Texture" id=5]
+[ext_resource path="res://assets/mobs/knight_front_l.png" type="Texture" id=6]
 [ext_resource path="res://assets/mobs/knight_front_r.png" type="Texture" id=7]
-[ext_resource path="res://assets/mobs/knight_front_l.png" type="Texture" id=8]
-[ext_resource path="res://assets/mobs/knight_back_l.png" type="Texture" id=9]
-[ext_resource path="res://assets/mobs/knight_back_r.png" type="Texture" id=10]
+[ext_resource path="res://assets/mobs/knight_back_r.png" type="Texture" id=8]
+[ext_resource path="res://assets/mobs/knight_left.png" type="Texture" id=9]
+[ext_resource path="res://assets/mobs/knight_back_l.png" type="Texture" id=10]
 
-[sub_resource type="QuadMesh" id=1]
-
-[sub_resource type="SpatialMaterial" id=6]
-resource_local_to_scene = true
-flags_transparent = true
-params_depth_draw_mode = 3
-params_billboard_mode = 2
-params_billboard_keep_scale = true
-albedo_texture = ExtResource( 2 )
-uv1_scale = Vector3( 0.25, 0.25, 1 )
-
-[sub_resource type="CylinderShape" id=3]
+[sub_resource type="CylinderShape" id=1]
 margin = 0.05
 radius = 0.15
 height = 0.6
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 resource_name = "idle"
+length = 1.2
 loop = true
 step = 0.05
 tracks/0/type = "value"
-tracks/0/path = NodePath("MeshInstance:material/0:uv1_offset")
-tracks/0/interp = 0
+tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.25, 0.55, 0.8 ),
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9 ),
 "transitions": PoolRealArray( 1, 1, 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 0.25, 0, 0 ), Vector3( 0.5, 0, 0 ), Vector3( 0.75, 0, 0 ) ]
+"update": 1,
+"values": [ 0, 1, 2, 3 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 resource_name = "move"
 length = 0.8
 loop = true
 step = 0.05
 tracks/0/type = "value"
-tracks/0/path = NodePath("MeshInstance:material/0:uv1_offset")
-tracks/0/interp = 0
+tracks/0/path = NodePath("Sprite3D:frame")
+tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
 "times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
 "transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
-"update": 0,
-"values": [ Vector3( 0, 0.25, 0 ), Vector3( 0.25, 0.25, 0 ), Vector3( 0.5, 0.25, 0 ), Vector3( 0.75, 0.25, 0 ), Vector3( 0, 0.5, 0 ), Vector3( 0.25, 0.5, 0 ), Vector3( 0.5, 0.5, 0 ), Vector3( 0.75, 0.5, 0 ) ]
+"update": 1,
+"values": [ 4, 5, 6, 7, 8, 9, 10, 11 ]
 }
 
 [node name="Mob" type="KinematicBody"]
 script = ExtResource( 1 )
 speed = 2.5
 
-[node name="MeshInstance" type="MeshInstance" parent="."]
-transform = Transform( 1.35, 0, 0, 0, 1.35, 0, 0, 0, 1, 0, 0.675, 0 )
-mesh = SubResource( 1 )
-material/0 = SubResource( 6 )
-script = ExtResource( 6 )
+[node name="Sprite3D" type="Sprite3D" parent="."]
+offset = Vector2( 0, 128 )
+pixel_size = 0.0055
+billboard = 2
+shaded = true
+alpha_cut = 2
+texture = ExtResource( 2 )
+vframes = 4
+hframes = 4
+script = ExtResource( 3 )
 front = ExtResource( 2 )
-frontLeft = ExtResource( 8 )
+frontLeft = ExtResource( 6 )
 frontRight = ExtResource( 7 )
-back = ExtResource( 3 )
-backLeft = ExtResource( 9 )
-backRight = ExtResource( 10 )
-left = ExtResource( 4 )
-right = ExtResource( 5 )
+back = ExtResource( 5 )
+backLeft = ExtResource( 10 )
+backRight = ExtResource( 8 )
+left = ExtResource( 9 )
+right = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
-anims/idle = SubResource( 4 )
-anims/move = SubResource( 5 )
+anims/idle = SubResource( 2 )
+anims/move = SubResource( 3 )
